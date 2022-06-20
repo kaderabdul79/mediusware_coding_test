@@ -17,7 +17,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.index');
+        $list = Product::select('id','title','description','created_at')->orderBy('id')->with('varients','productVariantPrice')->paginate(2);
+        return view('products.index',compact('list'));
     }
 
     /**

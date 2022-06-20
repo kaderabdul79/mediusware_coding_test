@@ -51,23 +51,30 @@
                     </thead>
 
                     <tbody>
-
+                        @foreach ($list as $key => $item)
                     <tr>
-                        <td>1</td>
-                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>
-                        <td>Quality product in low cost</td>
+                        <td>{{++$key}}</td>
+                        <td>{{$item->title}}<br> Created at :  {{date('d-M-Y',strtotime($item->created_at))}}</td>
+                        <td> {{substr($item->description, 1, 40) . '...'}}</td>
                         <td>
-                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
+                            <dl class="row mb-0"  id="variant">
 
+                        
                                 <dt class="col-sm-3 pb-0">
-                                    SM/ Red/ V-Nick
+                                    @foreach($item->varients as $varient)
+                                      {{$varient->variant}} /
+                                    @endforeach 
                                 </dt>
+                           
                                 <dd class="col-sm-9">
+                                    @foreach($item->productVariantPrice as $price)
                                     <dl class="row mb-0">
-                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>
-                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>
+                                        <dt class="col-sm-4 pb-0">Price : {{ number_format($price->price,2) }}</dt>
+                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format($price->stock,2) }}</dd>
                                     </dl>
+                                    @endforeach 
                                 </dd>
+
                             </dl>
                             <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
                         </td>
@@ -77,6 +84,8 @@
                             </div>
                         </td>
                     </tr>
+                            
+                    @endforeach
 
                     </tbody>
 
@@ -88,10 +97,10 @@
         <div class="card-footer">
             <div class="row justify-content-between">
                 <div class="col-md-6">
-                    <p>Showing 1 to 10 out of 100</p>
+                    <p>Showing {{ $list->firstItem() }} to {{ $list->lastItem() }} out of {{$list->total()}}</p>
                 </div>
                 <div class="col-md-2">
-
+                   {{$list->links()}}
                 </div>
             </div>
         </div>
